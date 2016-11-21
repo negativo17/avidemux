@@ -27,6 +27,7 @@ BuildRequires:  lame-devel
 BuildRequires:  libass-devel
 BuildRequires:  libfdk-aac-devel
 BuildRequires:  libmad-devel
+BuildRequires:  libmp4v2-devel
 BuildRequires:  libogg-devel
 BuildRequires:  libsamplerate-devel
 BuildRequires:  libva-devel
@@ -120,6 +121,7 @@ rm -fr \
     avidemux_plugins/ADM_audioDecoders/ADM_ad_ac3/ADM_liba52 \
     avidemux_plugins/ADM_audioDecoders/ADM_ad_mad/ADM_libMad \
     avidemux_plugins/ADM_audioEncoders/twolame/ADM_libtwolame \
+    avidemux_plugins/ADM_muxers/muxerMp4v2/libmp4v2 \
     avidemux_plugins/ADM_videoFilters6/ass/ADM_libass
 
 # rpmlint fixes
@@ -234,7 +236,6 @@ chmod 755 %{buildroot}%{_libdir}/*.so*
 %files libs
 %license COPYING 
 %doc README AUTHORS
-%{_datadir}/%{name}6
 %{_libdir}/ADM_plugins6
 # Rebranded & patched ffmpeg:
 %{_libdir}/libADM6avcodec.so.57
@@ -278,6 +279,7 @@ chmod 755 %{buildroot}%{_libdir}/*.so*
 
 %files cli
 %{_bindir}/avidemux3_cli
+%{_datadir}/%{name}6
 %{_libdir}/ADM_plugins6/videoFilters/cli
 %{_libdir}/libADM_UI_Cli6.so
 %{_libdir}/libADM_render6_cli.so
@@ -289,6 +291,7 @@ chmod 755 %{buildroot}%{_libdir}/*.so*
 %changelog
 * Mon Nov 21 2016 Simone Caronni <negativo17@gmail.com> - 2.6.15-2
 - Split components in gui/cli/libssubpackages.
+- Use system libmp4v2.
 
 * Sun Nov 20 2016 Simone Caronni <negativo17@gmail.com> - 2.6.15-1
 - First build.

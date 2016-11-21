@@ -3,7 +3,7 @@
 
 Name:           avidemux
 Version:        2.6.15
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Free video editor designed for simple cutting, filtering and encoding tasks
 License:        GPLv2
 URL:            http://fixounet.free.fr/avidemux/
@@ -55,17 +55,57 @@ BuildRequires:  x265-devel
 BuildRequires:  xvidcore-devel
 BuildRequires:  yasm-devel
 
-Provides:       bundled(ffmpeg) = 3.0.3
-
 %description
 Avidemux is a free video editor designed for simple cutting, filtering and
 encoding tasks. It supports many file types, including AVI, DVD compatible MPEG
 files, MP4 and ASF, using a variety of codecs. Tasks can be automated using
 projects, job queue and powerful scripting capabilities.
 
+%package libs
+Summary:    Base libaries for Avidemux
+Provides:   bundled(ffmpeg) = 3.0.3
+
+%description libs
+Avidemux is a free video editor designed for simple cutting, filtering and
+encoding tasks. It supports many file types, including AVI, DVD compatible MPEG
+files, MP4 and ASF, using a variety of codecs. Tasks can be automated using
+projects, job queue and powerful scripting capabilities.
+
+This package contains the base libraries.
+
+%package cli
+Summary:    Command line interface for Avidemux
+
+%description cli
+Avidemux is a free video editor designed for simple cutting, filtering and
+encoding tasks. It supports many file types, including AVI, DVD compatible MPEG
+files, MP4 and ASF, using a variety of codecs. Tasks can be automated using
+projects, job queue and powerful scripting capabilities.
+
+This package contains the command line interface.
+
+%package gui
+Summary:    Graphical interface for Avidemux
+Obsoletes:  %{name}-gtk%{?_isa} < %{version}-%{release}
+Provides:   %{name}-gtk%{?_isa} = %{version}-%{release}
+Obsoletes:  %{name}-i18n%{?_isa} < %{version}-%{release}
+Provides:   %{name}-i18n%{?_isa} = %{version}-%{release}
+Obsoletes:  %{name}-qt%{?_isa} < %{version}-%{release}
+Provides:   %{name}-qt%{?_isa} = %{version}-%{release}
+
+%description gui
+Avidemux is a free video editor designed for simple cutting, filtering and
+encoding tasks. It supports many file types, including AVI, DVD compatible MPEG
+files, MP4 and ASF, using a variety of codecs. Tasks can be automated using
+projects, job queue and powerful scripting capabilities.
+
+This package contains the graphical interface.
+
 %package devel
 Summary:    Development files for Avidemux
-Requires:   %{name}%{?_isa} = %{version}-%{release}
+Requires:   %{name}-libs%{?_isa} = %{version}-%{release}
+Requires:   %{name}-cli%{?_isa} = %{version}-%{release}
+Requires:   %{name}-gui%{?_isa} = %{version}-%{release}
 
 %description devel
 The %{name}-devel package contains libraries and header files for developing
@@ -161,7 +201,19 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
 # rpmlint fixes
 chmod 755 %{buildroot}%{_libdir}/*.so*
 
-%post
+%post libs
+/sbin/ldconfig
+
+%postun libs
+/sbin/ldconfig
+
+%post cli
+/sbin/ldconfig
+
+%postun cli
+/sbin/ldconfig
+
+%post gui
 /sbin/ldconfig
 %if 0%{?fedora} == 23 || 0%{?rhel}
 %{_bindir}/update-mime-database %{_datadir}/mime &> /dev/null || :
@@ -170,7 +222,7 @@ chmod 755 %{buildroot}%{_libdir}/*.so*
 %{_bindir}/update-desktop-database &> /dev/null || :
 %endif
 
-%postun
+%postun gui
 /sbin/ldconfig
 %if 0%{?fedora} == 23 || 0%{?rhel}
 %{_bindir}/update-mime-database %{_datadir}/mime &> /dev/null || :
@@ -179,19 +231,64 @@ chmod 755 %{buildroot}%{_libdir}/*.so*
 %{_bindir}/update-desktop-database &> /dev/null || :
 %endif
 
-%files
+%files libs
 %license COPYING 
 %doc README AUTHORS
-%{_bindir}/*
-%{_datadir}/applications/%{name}.desktop
 %{_datadir}/%{name}6
+%{_libdir}/ADM_plugins6
+# Rebranded & patched ffmpeg:
+%{_libdir}/libADM6avcodec.so.57
+%{_libdir}/libADM6avformat.so.57
+%{_libdir}/libADM6avutil.so.55
+%{_libdir}/libADM6postproc.so.54
+%{_libdir}/libADM6swscale.so.4
+# end
+%{_libdir}/libADM_audioParser6.so
+%{_libdir}/libADM_core6.so
+%{_libdir}/libADM_coreAudio6.so
+%{_libdir}/libADM_coreAudioDevice6.so
+%{_libdir}/libADM_coreAudioEncoder6.so
+%{_libdir}/libADM_coreAudioFilterAPI6.so
+%{_libdir}/libADM_coreDemuxer6.so
+%{_libdir}/libADM_coreDemuxerMpeg6.so
+%{_libdir}/libADM_coreImage6.so
+%{_libdir}/libADM_coreImageLoader6.so
+%{_libdir}/libADM_coreJobs.so
+%{_libdir}/libADM_coreLibVA6.so
+%{_libdir}/libADM_coreMuxer6.so
+%{_libdir}/libADM_coreScript.so
+%{_libdir}/libADM_coreSocket6.so
+%{_libdir}/libADM_coreSqlLight3.so
+%{_libdir}/libADM_coreSubtitle.so
+%{_libdir}/libADM_coreUI6.so
+%{_libdir}/libADM_coreUtils6.so
+%{_libdir}/libADM_coreVDPAU6.so
+%{_libdir}/libADM_coreVideoCodec6.so
+%{_libdir}/libADM_coreVideoEncoder6.so
+%{_libdir}/libADM_coreVideoFilter6.so
+
+%files gui
+%{_bindir}/avidemux3_jobs_qt5
+%{_bindir}/avidemux3_qt5
+%{_datadir}/applications/%{name}.desktop
 %{_datadir}/pixmaps/%{name}.png
-%{_libdir}/*
+%{_libdir}/libADM_UIQT56.so
+%{_libdir}/libADM_openGLQT56.so
+%{_libdir}/libADM_render6_QT5.so
+
+%files cli
+%{_bindir}/avidemux3_cli
+%{_libdir}/ADM_plugins6/videoFilters/cli
+%{_libdir}/libADM_UI_Cli6.so
+%{_libdir}/libADM_render6_cli.so
 %{_mandir}/man1/*
 
 %files devel
 %{_includedir}/%{name}
 
 %changelog
+* Mon Nov 21 2016 Simone Caronni <negativo17@gmail.com> - 2.6.15-2
+- Split components in gui/cli/libssubpackages.
+
 * Sun Nov 20 2016 Simone Caronni <negativo17@gmail.com> - 2.6.15-1
 - First build.

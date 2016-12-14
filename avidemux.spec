@@ -3,7 +3,7 @@
 
 Name:           avidemux
 Version:        2.6.15
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Free video editor designed for simple cutting, filtering and encoding tasks
 License:        GPLv2
 URL:            http://fixounet.free.fr/avidemux/
@@ -93,6 +93,8 @@ Obsoletes:  %{name}-i18n%{?_isa} < %{version}-%{release}
 Provides:   %{name}-i18n%{?_isa} = %{version}-%{release}
 Obsoletes:  %{name}-qt%{?_isa} < %{version}-%{release}
 Provides:   %{name}-qt%{?_isa} = %{version}-%{release}
+Obsoletes:  %{name}%{?_isa} < %{version}-%{release}
+Provides:   %{name}%{?_isa} = %{version}-%{release}
 
 %description gui
 Avidemux is a free video editor designed for simple cutting, filtering and
@@ -289,6 +291,9 @@ chmod 755 %{buildroot}%{_libdir}/*.so*
 %{_includedir}/%{name}
 
 %changelog
+* Wed Dec 14 2016 Simone Caronni <negativo17@gmail.com> - 2.6.15-3
+- GUI package should also obsolete generic package.
+
 * Mon Nov 21 2016 Simone Caronni <negativo17@gmail.com> - 2.6.15-2
 - Split components in gui/cli/libssubpackages.
 - Use system libmp4v2.

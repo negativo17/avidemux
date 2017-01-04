@@ -2,14 +2,14 @@
 # libdca/dcadec?
 
 Name:           avidemux
-Version:        2.6.15
-Release:        3%{?dist}
+Version:        2.6.16
+Release:        1%{?dist}
 Summary:        Free video editor designed for simple cutting, filtering and encoding tasks
 License:        GPLv2
 URL:            http://fixounet.free.fr/avidemux/
 
 Source0:        http://downloads.sourceforge.net/%{name}/%{name}_%{version}.tar.gz
-Patch0:         %{name}-2.6.15-system-libs.patch
+Patch0:         %{name}-2.6.16-system-libs.patch
 
 BuildRequires:  a52dec-devel
 BuildRequires:  alsa-lib-devel
@@ -148,6 +148,9 @@ export CFLAGS="%{optflags} -I%{_includedir}/nvenc"
     -DENABLE_QT5=True \
     -DCMAKE_EDIT_COMMAND=vim \
     -DNVENC_INCLUDE_DIR=%{_includedir}/nvenc \
+    -DUSE_EXTERNAL_LIBASS=ON \
+    -DUSE_EXTERNAL_LIBMAD=ON \
+    -DUSE_EXTERNAL_LIBA52=ON \
     $*
 }
 
@@ -196,6 +199,9 @@ popd
 
 %install
 cp -pa install/* %{buildroot}/
+
+# Windows executables
+rm -fr %{buildroot}/%{_datadir}/ADM6_addons
 
 install -p -Dm 644 man/%{name}.1 %{buildroot}%{_mandir}/man1/%{name}.1
 install -p -Dm 644 %{name}_icon.png %{buildroot}%{_datadir}/pixmaps/%{name}.png
@@ -291,6 +297,10 @@ chmod 755 %{buildroot}%{_libdir}/*.so*
 %{_includedir}/%{name}
 
 %changelog
+* Tue Jan 03 2017 Simone Caronni <negativo17@gmail.com> - 2.6.16-1
+- Update to 2.6.16.
+- Update system libraries patch.
+
 * Wed Dec 14 2016 Simone Caronni <negativo17@gmail.com> - 2.6.15-3
 - GUI package should also obsolete generic package.
 

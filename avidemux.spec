@@ -2,14 +2,13 @@
 # libdca/dcadec?
 
 Name:           avidemux
-Version:        2.6.16
+Version:        2.6.18
 Release:        1%{?dist}
 Summary:        Free video editor designed for simple cutting, filtering and encoding tasks
 License:        GPLv2
 URL:            http://fixounet.free.fr/avidemux/
 
 Source0:        http://downloads.sourceforge.net/%{name}/%{name}_%{version}.tar.gz
-Patch0:         %{name}-2.6.16-system-libs.patch
 
 BuildRequires:  a52dec-devel
 BuildRequires:  alsa-lib-devel
@@ -116,7 +115,6 @@ applications that use %{name}.
 
 %prep
 %setup -qn %{name}_%{version}
-%patch0 -p1
 
 # Remove bundled libraries
 rm -fr \
@@ -151,6 +149,7 @@ export CFLAGS="%{optflags} -I%{_includedir}/nvenc"
     -DUSE_EXTERNAL_LIBASS=ON \
     -DUSE_EXTERNAL_LIBMAD=ON \
     -DUSE_EXTERNAL_LIBA52=ON \
+    -DUSE_EXTERNAL_MP4V2=ON \
     $*
 }
 
@@ -297,6 +296,9 @@ chmod 755 %{buildroot}%{_libdir}/*.so*
 %{_includedir}/%{name}
 
 %changelog
+* Fri Jan 27 2017 Simone Caronni <negativo17@gmail.com> - 2.6.18-1
+- Update to 2.6.18.
+
 * Tue Jan 03 2017 Simone Caronni <negativo17@gmail.com> - 2.6.16-1
 - Update to 2.6.16.
 - Update system libraries patch.

@@ -3,7 +3,7 @@
 
 Name:           avidemux
 Version:        2.6.18
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Free video editor designed for simple cutting, filtering and encoding tasks
 License:        GPLv2
 URL:            http://fixounet.free.fr/avidemux/
@@ -19,7 +19,8 @@ BuildRequires:  faad2-devel
 #BuildRequires:  ffmpeg-devel
 BuildRequires:  fontconfig-devel
 BuildRequires:  freetype-devel
-BuildRequires:  gettext intltool
+BuildRequires:  gettext
+BuildRequires:  intltool
 BuildRequires:  jack-audio-connection-kit-devel
 BuildRequires:  js-devel
 BuildRequires:  lame-devel
@@ -184,6 +185,7 @@ popd
 
 mkdir buildPluginsQt5; pushd buildPluginsQt5
 prep -DPLUGIN_UI=QT4 ../avidemux_plugins
+build
 popd
 
 mkdir buildPluginsCLI; pushd buildPluginsCLI
@@ -244,6 +246,8 @@ chmod 755 %{buildroot}%{_libdir}/*.so*
 %license COPYING 
 %doc README AUTHORS
 %{_libdir}/ADM_plugins6
+%exclude %{_libdir}/ADM_plugins6/videoEncoders/qt5
+%exclude %{_libdir}/ADM_plugins6/videoFilters/qt5
 # Rebranded & patched ffmpeg:
 %{_libdir}/libADM6avcodec.so.57
 %{_libdir}/libADM6avformat.so.57
@@ -280,6 +284,8 @@ chmod 755 %{buildroot}%{_libdir}/*.so*
 %{_bindir}/avidemux3_qt5
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/pixmaps/%{name}.png
+%{_libdir}/ADM_plugins6/videoEncoders/qt5
+%{_libdir}/ADM_plugins6/videoFilters/qt5
 %{_libdir}/libADM_UIQT56.so
 %{_libdir}/libADM_openGLQT56.so
 %{_libdir}/libADM_render6_QT5.so
@@ -296,6 +302,9 @@ chmod 755 %{buildroot}%{_libdir}/*.so*
 %{_includedir}/%{name}
 
 %changelog
+* Fri Feb 10 2017 Simone Caronni <negativo17@gmail.com> - 2.6.18-2
+- Add missing QT5 components to GUI subpackage, thanks George Seaton!
+
 * Fri Jan 27 2017 Simone Caronni <negativo17@gmail.com> - 2.6.18-1
 - Update to 2.6.18.
 
@@ -307,7 +316,7 @@ chmod 755 %{buildroot}%{_libdir}/*.so*
 - GUI package should also obsolete generic package.
 
 * Mon Nov 21 2016 Simone Caronni <negativo17@gmail.com> - 2.6.15-2
-- Split components in gui/cli/libssubpackages.
+- Split components in gui/cli/libs subpackages.
 - Use system libmp4v2.
 
 * Sun Nov 20 2016 Simone Caronni <negativo17@gmail.com> - 2.6.15-1

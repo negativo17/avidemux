@@ -3,7 +3,7 @@
 
 Name:           avidemux
 Version:        2.6.18
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Free video editor designed for simple cutting, filtering and encoding tasks
 License:        GPLv2
 URL:            http://fixounet.free.fr/avidemux/
@@ -302,6 +302,9 @@ chmod 755 %{buildroot}%{_libdir}/*.so*
 %{_includedir}/%{name}
 
 %changelog
+* Sun Feb 26 2017 Simone Caronni <negativo17@gmail.com> - 2.6.18-3
+- Rebuild for x265 update.
+
 * Fri Feb 10 2017 Simone Caronni <negativo17@gmail.com> - 2.6.18-2
 - Add missing QT5 components to GUI subpackage, thanks George Seaton!
 

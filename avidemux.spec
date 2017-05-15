@@ -2,8 +2,9 @@
 # libdca/dcadec?
 
 Name:           avidemux
-Version:        2.6.18
-Release:        3%{?dist}
+Version:        2.6.20
+Release:        1%{?dist}
+Epoch:          1
 Summary:        Free video editor designed for simple cutting, filtering and encoding tasks
 License:        GPLv2
 URL:            http://fixounet.free.fr/avidemux/
@@ -87,14 +88,14 @@ This package contains the command line interface.
 
 %package gui
 Summary:    Graphical interface for Avidemux
-Obsoletes:  %{name}-gtk%{?_isa} < %{version}-%{release}
-Provides:   %{name}-gtk%{?_isa} = %{version}-%{release}
-Obsoletes:  %{name}-i18n%{?_isa} < %{version}-%{release}
-Provides:   %{name}-i18n%{?_isa} = %{version}-%{release}
-Obsoletes:  %{name}-qt%{?_isa} < %{version}-%{release}
-Provides:   %{name}-qt%{?_isa} = %{version}-%{release}
-Obsoletes:  %{name}%{?_isa} < %{version}-%{release}
-Provides:   %{name}%{?_isa} = %{version}-%{release}
+Obsoletes:  %{name}-gtk%{?_isa} < %{?epoch:%{epoch}:}%{version}-%{release}
+Provides:   %{name}-gtk%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
+Obsoletes:  %{name}-i18n%{?_isa} < %{?epoch:%{epoch}:}%{version}-%{release}
+Provides:   %{name}-i18n%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
+Obsoletes:  %{name}-qt%{?_isa} < %{?epoch:%{epoch}:}%{version}-%{release}
+Provides:   %{name}-qt%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
+Obsoletes:  %{name}%{?_isa} < %{?epoch:%{epoch}:}%{version}-%{release}
+Provides:   %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 
 %description gui
 Avidemux is a free video editor designed for simple cutting, filtering and
@@ -106,9 +107,9 @@ This package contains the graphical interface.
 
 %package devel
 Summary:    Development files for Avidemux
-Requires:   %{name}-libs%{?_isa} = %{version}-%{release}
-Requires:   %{name}-cli%{?_isa} = %{version}-%{release}
-Requires:   %{name}-gui%{?_isa} = %{version}-%{release}
+Requires:   %{name}-libs%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
+Requires:   %{name}-cli%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
+Requires:   %{name}-gui%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 
 %description devel
 The %{name}-devel package contains libraries and header files for developing
@@ -302,6 +303,10 @@ chmod 755 %{buildroot}%{_libdir}/*.so*
 %{_includedir}/%{name}
 
 %changelog
+* Mon May 15 2017 Simone Caronni <negativo17@gmail.com> - 2.6.20-1
+- Update to 2.6.20.
+- Bump Epoch.
+
 * Sun Feb 26 2017 Simone Caronni <negativo17@gmail.com> - 2.6.18-3
 - Rebuild for x265 update.
 

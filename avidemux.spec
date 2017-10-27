@@ -2,7 +2,7 @@
 # libdca/dcadec?
 
 Name:           avidemux
-Version:        2.6.20
+Version:        2.7.0
 Release:        1%{?dist}
 Epoch:          1
 Summary:        Free video editor designed for simple cutting, filtering and encoding tasks
@@ -303,6 +303,9 @@ chmod 755 %{buildroot}%{_libdir}/*.so*
 %{_includedir}/%{name}
 
 %changelog
+* Fri Oct 27 2017 Simone Caronni <negativo17@gmail.com> - 1:2.7.0-1
+- Update to 2.7.0.
+
 * Mon May 15 2017 Simone Caronni <negativo17@gmail.com> - 2.6.20-1
 - Update to 2.6.20.
 - Bump Epoch.

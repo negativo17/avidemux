@@ -13,7 +13,11 @@ Source0:        http://downloads.sourceforge.net/%{name}/%{name}_%{version}.tar.
 
 BuildRequires:  a52dec-devel
 BuildRequires:  alsa-lib-devel
+%if 0%{?fedora}
 BuildRequires:  cmake
+%else
+BuildRequires:  cmake3
+%endif
 BuildRequires:  desktop-file-utils
 BuildRequires:  faac-devel
 BuildRequires:  faad2-devel
@@ -142,7 +146,11 @@ sed -i \
 
 prep() {
 export CFLAGS="%{optflags} -I%{_includedir}/nvenc"
+%if 0%{?fedora}
 %cmake \
+%else
+%cmake3 \
+%endif
     -DCMAKE_BUILD_TYPE=RelWithDebInfo \
     -DFAKEROOT=%{_builddir}/%{name}_%{version}/install \
     -DENABLE_QT5=True \
@@ -227,19 +235,15 @@ chmod 755 %{buildroot}%{_libdir}/*.so*
 
 %post gui
 /sbin/ldconfig
-%if 0%{?fedora} == 23 || 0%{?rhel}
+%if 0%{?rhel}
 %{_bindir}/update-mime-database %{_datadir}/mime &> /dev/null || :
-%endif
-%if 0%{?fedora} == 24 || 0%{?fedora} == 23 || 0%{?rhel}
 %{_bindir}/update-desktop-database &> /dev/null || :
 %endif
 
 %postun gui
 /sbin/ldconfig
-%if 0%{?fedora} == 23 || 0%{?rhel}
+%if 0%{?rhel}
 %{_bindir}/update-mime-database %{_datadir}/mime &> /dev/null || :
-%endif
-%if 0%{?fedora} == 24 || 0%{?fedora} == 23 || 0%{?rhel}
 %{_bindir}/update-desktop-database &> /dev/null || :
 %endif
 
@@ -305,6 +309,7 @@ chmod 755 %{buildroot}%{_libdir}/*.so*
 %changelog
 * Fri Oct 27 2017 Simone Caronni <negativo17@gmail.com> - 1:2.7.0-1
 - Update to 2.7.0.
+- Require cmake 3 on RHEL 7.
 
 * Mon May 15 2017 Simone Caronni <negativo17@gmail.com> - 2.6.20-1
 - Update to 2.6.20.

@@ -3,7 +3,7 @@
 
 Name:           avidemux
 Version:        2.7.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 Epoch:          1
 Summary:        Free video editor designed for simple cutting, filtering and encoding tasks
 License:        GPLv2
@@ -221,28 +221,20 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
 # rpmlint fixes
 chmod 755 %{buildroot}%{_libdir}/*.so*
 
-%post libs
-/sbin/ldconfig
+%ldconfig_scriptlets libs
 
-%postun libs
-/sbin/ldconfig
-
-%post cli
-/sbin/ldconfig
-
-%postun cli
-/sbin/ldconfig
+%ldconfig_scriptlets cli
 
 %post gui
-/sbin/ldconfig
-%if 0%{?rhel}
+%{?ldconfig}
+%if 0%{?rhel} == 7
 %{_bindir}/update-mime-database %{_datadir}/mime &> /dev/null || :
 %{_bindir}/update-desktop-database &> /dev/null || :
 %endif
 
 %postun gui
-/sbin/ldconfig
-%if 0%{?rhel}
+%{?ldconfig}
+%if 0%{?rhel} == 7
 %{_bindir}/update-mime-database %{_datadir}/mime &> /dev/null || :
 %{_bindir}/update-desktop-database &> /dev/null || :
 %endif
@@ -307,6 +299,10 @@ chmod 755 %{buildroot}%{_libdir}/*.so*
 %{_includedir}/%{name}
 
 %changelog
+* Fri Apr 27 2018 Simone Caronni <negativo17@gmail.com> - 1:2.7.0-4
+- Rebuild for updated dependencies.
+- Update SPEC file.
+
 * Tue Apr 10 2018 Simone Caronni <negativo17@gmail.com> - 1:2.7.0-3
 - Rebuild for updated dependencies.
 

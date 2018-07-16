@@ -2,15 +2,14 @@
 # libdca/dcadec?
 
 Name:           avidemux
-Version:        2.7.0
-Release:        5%{?dist}
+Version:        2.7.1
+Release:        1%{?dist}
 Epoch:          1
 Summary:        Free video editor designed for simple cutting, filtering and encoding tasks
 License:        GPLv2
 URL:            http://fixounet.free.fr/avidemux/
 
 Source0:        http://downloads.sourceforge.net/%{name}/%{name}_%{version}.tar.gz
-Patch0:         https://github.com/mean00/avidemux2/commit/afdd9c4b876d77a4974d3fa7d9f25caeffbdf13d.patch#/avidemux-2.7.0-glibc.patch
 
 BuildRequires:  a52dec-devel
 BuildRequires:  alsa-lib-devel
@@ -121,7 +120,7 @@ The %{name}-devel package contains libraries and header files for developing
 applications that use %{name}.
 
 %prep
-%autosetup -p1 -n %{name}_%{version}
+%autosetup -n %{name}_%{version}
 
 # Remove bundled libraries
 rm -fr \
@@ -264,6 +263,7 @@ chmod 755 %{buildroot}%{_libdir}/*.so*
 %{_libdir}/libADM_coreImage6.so
 %{_libdir}/libADM_coreImageLoader6.so
 %{_libdir}/libADM_coreJobs.so
+%{_libdir}/libADM_coreLibVAEnc6.so
 %{_libdir}/libADM_coreLibVA6.so
 %{_libdir}/libADM_coreMuxer6.so
 %{_libdir}/libADM_coreScript.so
@@ -300,6 +300,9 @@ chmod 755 %{buildroot}%{_libdir}/*.so*
 %{_includedir}/%{name}
 
 %changelog
+* Mon Jul 16 2018 Simone Caronni <negativo17@gmail.com> - 1:2.7.1-1
+- Update to 2.7.1.
+
 * Fri Apr 27 2018 Simone Caronni <negativo17@gmail.com> - 1:2.7.0-5
 - Fix build on Fedora 28.
 

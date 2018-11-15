@@ -3,7 +3,7 @@
 
 Name:           avidemux
 Version:        2.7.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Epoch:          1
 Summary:        Free video editor designed for simple cutting, filtering and encoding tasks
 License:        GPLv2
@@ -300,6 +300,9 @@ chmod 755 %{buildroot}%{_libdir}/*.so*
 %{_includedir}/%{name}
 
 %changelog
+* Thu Nov 15 2018 Simone Caronni <negativo17@gmail.com> - 1:2.7.1-3
+- Rebuild for updated x265.
+
 * Fri Sep 21 2018 Simone Caronni <negativo17@gmail.com> - 1:2.7.1-2
 - Rebuild for updated dependencies.
 

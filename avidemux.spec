@@ -1,9 +1,11 @@
 # Todo: use system ffmpeg (patches)
 # libdca/dcadec?
 
+%global org org.avidemux.Avidemux
+
 Name:           avidemux
-Version:        2.7.1
-Release:        4%{?dist}
+Version:        2.7.3
+Release:        1%{?dist}
 Epoch:          1
 Summary:        Free video editor designed for simple cutting, filtering and encoding tasks
 License:        GPLv2
@@ -29,6 +31,9 @@ BuildRequires:  intltool
 BuildRequires:  jack-audio-connection-kit-devel
 BuildRequires:  js-devel
 BuildRequires:  lame-devel
+%if 0%{?fedora} || 0%{?rhel} >= 8
+BuildRequires:  libappstream-glib
+%endif
 BuildRequires:  libass-devel
 BuildRequires:  libfdk-aac-devel
 BuildRequires:  libmad-devel
@@ -134,11 +139,6 @@ rm -fr \
 find . -name "*.swp" -delete
 find . -name "*.cpp" -exec chmod 644 {} \;
 find . -name "*.h" -exec chmod 644 {} \;
-sed -i \
-    -e '/Encoding=UTF-8/d' \
-    -e 's/Categories=Application;AudioVideo/Categories=AudioVideo;/g' \
-    -e 's/Exec=avidemux2_gtk/Exec=avidemux3_qt5/g' \
-    *.desktop
 
 %build
 # Get the actual components to be built with the official build command:
@@ -214,12 +214,15 @@ cp -pa install/* %{buildroot}/
 rm -fr %{buildroot}/%{_datadir}/ADM6_addons
 
 install -p -Dm 644 man/%{name}.1 %{buildroot}%{_mandir}/man1/%{name}.1
-install -p -Dm 644 %{name}_icon.png %{buildroot}%{_datadir}/pixmaps/%{name}.png
-install -p -Dm 644 %{name}2.desktop %{buildroot}%{_datadir}/applications/%{name}.desktop
-desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
 
 # rpmlint fixes
 chmod 755 %{buildroot}%{_libdir}/*.so*
+
+%check
+desktop-file-validate %{buildroot}%{_datadir}/applications/%{org}.desktop
+%if 0%{?fedora} || 0%{?rhel} >= 8
+appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/%{org}.appdata.xml
+%endif
 
 %ldconfig_scriptlets libs
 
@@ -246,11 +249,11 @@ chmod 755 %{buildroot}%{_libdir}/*.so*
 %exclude %{_libdir}/ADM_plugins6/videoEncoders/qt5
 %exclude %{_libdir}/ADM_plugins6/videoFilters/qt5
 # Rebranded & patched ffmpeg:
-%{_libdir}/libADM6avcodec.so.57
-%{_libdir}/libADM6avformat.so.57
-%{_libdir}/libADM6avutil.so.55
-%{_libdir}/libADM6postproc.so.54
-%{_libdir}/libADM6swscale.so.4
+%{_libdir}/libADM6avcodec.so.58
+%{_libdir}/libADM6avformat.so.58
+%{_libdir}/libADM6avutil.so.56
+%{_libdir}/libADM6postproc.so.55
+%{_libdir}/libADM6swscale.so.5
 # end
 %{_libdir}/libADM_audioParser6.so
 %{_libdir}/libADM_core6.so
@@ -269,7 +272,7 @@ chmod 755 %{buildroot}%{_libdir}/*.so*
 %{_libdir}/libADM_coreScript.so
 %{_libdir}/libADM_coreSocket6.so
 %{_libdir}/libADM_coreSqlLight3.so
-%{_libdir}/libADM_coreSubtitle.so
+%{_libdir}/libADM_coreSubtitles6.so
 %{_libdir}/libADM_coreUI6.so
 %{_libdir}/libADM_coreUtils6.so
 %{_libdir}/libADM_coreVDPAU6.so
@@ -280,8 +283,13 @@ chmod 755 %{buildroot}%{_libdir}/*.so*
 %files gui
 %{_bindir}/avidemux3_jobs_qt5
 %{_bindir}/avidemux3_qt5
-%{_datadir}/applications/%{name}.desktop
-%{_datadir}/pixmaps/%{name}.png
+%{_datadir}/applications/%{org}.desktop
+%{_datadir}/icons/hicolor/*/apps/%{org}.png
+%if 0%{?fedora} || 0%{?rhel} >= 8
+%{_datadir}/metainfo/%{org}.appdata.xml
+%else
+%exclude %{_datadir}/metainfo
+%endif
 %{_libdir}/ADM_plugins6/videoEncoders/qt5
 %{_libdir}/ADM_plugins6/videoFilters/qt5
 %{_libdir}/libADM_UIQT56.so
@@ -300,6 +308,9 @@ chmod 755 %{buildroot}%{_libdir}/*.so*
 %{_includedir}/%{name}
 
 %changelog
+* Sun May 12 2019 Simone Caronni <negativo17@gmail.com> - 1:2.7.3-1
+- Update to 2.7.3.
+
 * Thu Feb 28 2019 Simone Caronni <negativo17@gmail.com> - 1:2.7.1-4
 - Rebuild for updated dependencies.
 

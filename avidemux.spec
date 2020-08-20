@@ -1,8 +1,11 @@
+# Turn off the brp-python-bytecompile script
+%global __os_install_post %(echo '%{__os_install_post}' | sed -e 's!/usr/lib[^[:space:]]*/brp-python-bytecompile[[:space:]].*$!!g')
+
 %global org org.avidemux.Avidemux
 
 Name:           avidemux
 Version:        2.7.6
-Release:        1%{?dist}
+Release:        2%{?dist}
 Epoch:          1
 Summary:        Free video editor designed for simple cutting, filtering and encoding tasks
 License:        GPLv2
@@ -254,7 +257,9 @@ appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/%{org}.ap
 %files libs
 %license COPYING 
 %doc README AUTHORS
+%if 0%{?fedora} || 0%{?rhel} >= 8
 %{_bindir}/vsProxy
+%endif
 %dir %{_datadir}/%{name}6
 %dir %{_libdir}/ADM_plugins6
 %{_libdir}/ADM_plugins6/audioDecoder
@@ -304,7 +309,9 @@ appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/%{org}.ap
 %files gui
 %{_bindir}/avidemux3_jobs_qt5
 %{_bindir}/avidemux3_qt5
+%if 0%{?fedora} || 0%{?rhel} >= 8
 %{_bindir}/vsProxy_gui_qt5
+%endif
 %{_datadir}/applications/%{org}.desktop
 %{_datadir}/icons/hicolor/*/apps/%{org}.png
 %{_datadir}/%{name}6/qt5
@@ -328,6 +335,9 @@ appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/%{org}.ap
 %{_libdir}/libADM_render6_cli.so
 
 %changelog
+* Thu Aug 20 2020 Simone Caronni <negativo17@gmail.com> - 1:2.7.6-2
+- Fix build on RHEL/CentOS 7.
+
 * Tue Aug 18 2020 Simone Caronni <negativo17@gmail.com> - 1:2.7.6-1
 - Update to 2.7.6.
 - Clean up SPEC file.

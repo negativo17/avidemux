@@ -5,7 +5,7 @@
 
 Name:           avidemux
 Version:        2.7.6
-Release:        2%{?dist}
+Release:        3%{?dist}
 Epoch:          1
 Summary:        Free video editor designed for simple cutting, filtering and encoding tasks
 License:        GPLv2
@@ -54,7 +54,7 @@ BuildRequires:  libXv-devel
 BuildRequires:  mesa-libGL-devel
 BuildRequires:  mesa-libGLU-devel
 BuildRequires:  nv-codec-headers
-BuildRequires:  nvenc
+BuildRequires:  nvidia-sdk-video-codec
 BuildRequires:  opencore-amr-devel
 BuildRequires:  opus-devel
 BuildRequires:  pkgconfig
@@ -335,6 +335,9 @@ appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/%{org}.ap
 %{_libdir}/libADM_render6_cli.so
 
 %changelog
+* Sat Sep 05 2020 Simone Caronni <negativo17@gmail.com> - 1:2.7.6-3
+- Update build requirements.
+
 * Thu Aug 20 2020 Simone Caronni <negativo17@gmail.com> - 1:2.7.6-2
 - Fix build on RHEL/CentOS 7.
 

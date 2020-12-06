@@ -19,11 +19,6 @@ Patch0:         https://github.com/mean00/%{name}2/commit/a1d969d47a5d2e49a7c3a0
 
 BuildRequires:  a52dec-devel
 BuildRequires:  alsa-lib-devel
-%if 0%{?fedora}
-BuildRequires:  cmake
-%else
-BuildRequires:  cmake3
-%endif
 BuildRequires:  desktop-file-utils
 BuildRequires:  fontconfig-devel
 BuildRequires:  freetype-devel
@@ -32,9 +27,6 @@ BuildRequires:  intltool
 BuildRequires:  jack-audio-connection-kit-devel
 BuildRequires:  lame-devel
 BuildRequires:  libaom-devel
-%if 0%{?fedora} || 0%{?rhel} >= 8
-BuildRequires:  libappstream-glib
-%endif
 BuildRequires:  libass-devel
 BuildRequires:  libfdk-aac-devel
 BuildRequires:  libmad-devel
@@ -44,11 +36,6 @@ BuildRequires:  libsamplerate-devel
 BuildRequires:  libva-devel
 BuildRequires:  libvdpau-devel
 BuildRequires:  libvorbis-devel
-%if 0%{?rhel} == 7
-BuildRequires:  libvpx1.7-devel
-%else
-BuildRequires:  libvpx-devel >= 1.7.0
-%endif
 BuildRequires:  libxml2-devel
 BuildRequires:  libXmu-devel
 BuildRequires:  libxslt
@@ -67,13 +54,20 @@ BuildRequires:  qt5-qttools-devel
 BuildRequires:  SDL2-devel
 BuildRequires:  sqlite-devel
 BuildRequires:  twolame-devel
-%if 0%{?fedora} || 0%{?rhel} >= 8
-BuildRequires:  vapoursynth-devel
-%endif
 BuildRequires:  x264-devel
 BuildRequires:  x265-devel
 BuildRequires:  xvidcore-devel
-BuildRequires:  yasm-devel
+BuildRequires:  yasm
+
+%if 0%{?fedora} || 0%{?rhel} >= 8
+BuildRequires:  cmake
+BuildRequires:  libappstream-glib
+BuildRequires:  libvpx-devel >= 1.7.0
+BuildRequires:  vapoursynth-devel
+%else
+BuildRequires:  cmake3
+BuildRequires:  libvpx1.7-devel
+%endif
 
 %description
 Avidemux is a free video editor designed for simple cutting, filtering and
@@ -340,6 +334,7 @@ appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/%{org}.ap
 %changelog
 * Sun Dec 06 2020 Simone Caronni <negativo17@gmail.com> - 1:2.7.6-4
 - Rebuild for updated dependencies.
+- Fix build requirements.
 
 * Sat Sep 05 2020 Simone Caronni <negativo17@gmail.com> - 1:2.7.6-3
 - Update build requirements.

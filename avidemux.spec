@@ -1,3 +1,6 @@
+%global __cmake_in_source_build 1
+%global _lto_cflags %{nil}
+
 # Turn off the brp-python-bytecompile script
 %global __os_install_post %(echo '%{__os_install_post}' | sed -e 's!/usr/lib[^[:space:]]*/brp-python-bytecompile[[:space:]].*$!!g')
 

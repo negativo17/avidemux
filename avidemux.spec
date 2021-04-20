@@ -19,6 +19,7 @@ Source0:        http://downloads.sourceforge.net/%{name}/%{name}_%{version}.tar.
 BuildRequires:  a52dec-devel
 BuildRequires:  alsa-lib-devel
 BuildRequires:  desktop-file-utils
+BuildRequires:  ffmpeg-devel
 BuildRequires:  fontconfig-devel
 BuildRequires:  freetype-devel
 BuildRequires:  gettext
@@ -76,7 +77,6 @@ projects, job queue and powerful scripting capabilities.
 
 %package libs
 Summary:    Base libraries for Avidemux
-Provides:   bundled(ffmpeg) = 4.2.3
 
 %description libs
 Avidemux is a free video editor designed for simple cutting, filtering and
@@ -120,7 +120,9 @@ This package contains the graphical interface.
 %autosetup -p1 -n %{name}_%{version}
 
 # Remove bundled libraries
+sed -i -e 's/include(admFFmpegBuild)//g' avidemux_core/CMakeLists.txt
 rm -fr \
+    cmake/admFFmpeg* cmake/ffmpeg* avidemux_core/ffmpeg_package \
     avidemux_plugins/ADM_audioDecoders/ADM_ad_ac3/ADM_liba52 \
     avidemux_plugins/ADM_audioDecoders/ADM_ad_mad/ADM_libMad \
     avidemux_plugins/ADM_audioEncoders/twolame/ADM_libtwolame \
@@ -144,6 +146,9 @@ find . -name "*.h" -exec chmod 644 {} \;
 #     --with-system-libmad \
 #     --with-system-libmp4v2
 
+%{set_build_flags}
+export CFLAGS="$CFLAGS -I%{_includedir}/ffmpeg"
+
 prep() {
 %if 0%{?fedora}
 %cmake \
@@ -155,6 +160,7 @@ prep() {
     -DCMAKE_EDIT_COMMAND=vim \
     -DENABLE_QT5=True \
     -DFAKEROOT=%{_builddir}/%{name}_%{version}/install \
+    -DINCLUDE_DIRECTORIES:STRING=%{_includedir}/ffmpeg \
     -DNVENC_INCLUDE_DIR=%{_includedir}/nvenc \
     -DOpenGL_GL_PREFERENCE=GLVND \
     -DUSE_EXTERNAL_LIBASS=true \

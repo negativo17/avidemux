@@ -7,15 +7,14 @@
 %global org org.avidemux.Avidemux
 
 Name:           avidemux
-Version:        2.7.6
-Release:        4%{?dist}
+Version:        2.7.8
+Release:        1%{?dist}
 Epoch:          1
 Summary:        Free video editor designed for simple cutting, filtering and encoding tasks
 License:        GPLv2
 URL:            http://fixounet.free.fr/%{name}/
 
 Source0:        http://downloads.sourceforge.net/%{name}/%{name}_%{version}.tar.gz
-Patch0:         https://github.com/mean00/%{name}2/commit/a1d969d47a5d2e49a7c3a0a0b6c7e6ed9fd46622.patch
 
 BuildRequires:  a52dec-devel
 BuildRequires:  alsa-lib-devel
@@ -332,6 +331,10 @@ appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/%{org}.ap
 %{_libdir}/libADM_render6_cli.so
 
 %changelog
+* Tue Apr 20 2021 Simone Caronni <negativo17@gmail.com> - 1:2.7.8-1
+- Update to 2.7.8.
+- Trim changelog.
+
 * Sun Dec 06 2020 Simone Caronni <negativo17@gmail.com> - 1:2.7.6-4
 - Rebuild for updated dependencies.
 - Fix build requirements.
@@ -360,56 +363,3 @@ appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/%{org}.ap
 
 * Thu Feb 28 2019 Simone Caronni <negativo17@gmail.com> - 1:2.7.1-4
 - Rebuild for updated dependencies.
-
-* Thu Nov 15 2018 Simone Caronni <negativo17@gmail.com> - 1:2.7.1-3
-- Rebuild for updated x265.
-
-* Fri Sep 21 2018 Simone Caronni <negativo17@gmail.com> - 1:2.7.1-2
-- Rebuild for updated dependencies.
-
-* Mon Jul 16 2018 Simone Caronni <negativo17@gmail.com> - 1:2.7.1-1
-- Update to 2.7.1.
-
-* Fri Apr 27 2018 Simone Caronni <negativo17@gmail.com> - 1:2.7.0-5
-- Fix build on Fedora 28.
-
-* Fri Apr 27 2018 Simone Caronni <negativo17@gmail.com> - 1:2.7.0-4
-- Rebuild for updated dependencies.
-- Update SPEC file.
-
-* Tue Apr 10 2018 Simone Caronni <negativo17@gmail.com> - 1:2.7.0-3
-- Rebuild for updated dependencies.
-
-* Thu Jan 11 2018 Simone Caronni <negativo17@gmail.com> - 1:2.7.0-2
-- Rebuild for updated libraries.
-
-* Fri Oct 27 2017 Simone Caronni <negativo17@gmail.com> - 1:2.7.0-1
-- Update to 2.7.0.
-- Require cmake 3 on RHEL 7.
-
-* Mon May 15 2017 Simone Caronni <negativo17@gmail.com> - 2.6.20-1
-- Update to 2.6.20.
-- Bump Epoch.
-
-* Sun Feb 26 2017 Simone Caronni <negativo17@gmail.com> - 2.6.18-3
-- Rebuild for x265 update.
-
-* Fri Feb 10 2017 Simone Caronni <negativo17@gmail.com> - 2.6.18-2
-- Add missing QT5 components to GUI subpackage, thanks George Seaton!
-
-* Fri Jan 27 2017 Simone Caronni <negativo17@gmail.com> - 2.6.18-1
-- Update to 2.6.18.
-
-* Tue Jan 03 2017 Simone Caronni <negativo17@gmail.com> - 2.6.16-1
-- Update to 2.6.16.
-- Update system libraries patch.
-
-* Wed Dec 14 2016 Simone Caronni <negativo17@gmail.com> - 2.6.15-3
-- GUI package should also obsolete generic package.
-
-* Mon Nov 21 2016 Simone Caronni <negativo17@gmail.com> - 2.6.15-2
-- Split components in gui/cli/libs subpackages.
-- Use system libmp4v2.
-
-* Sun Nov 20 2016 Simone Caronni <negativo17@gmail.com> - 2.6.15-1
-- First build.

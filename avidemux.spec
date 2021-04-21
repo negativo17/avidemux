@@ -68,6 +68,12 @@ BuildRequires:  cmake3
 BuildRequires:  libvpx1.7-devel
 %endif
 
+%if 0%{?rhel} == 7
+BuildRequires:  devtoolset-8-gcc-c++
+%else
+BuildRequires:  gcc-c++
+%endif
+
 %description
 Avidemux is a free video editor designed for simple cutting, filtering and
 encoding tasks. It supports many file types, including AVI, DVD compatible MPEG
@@ -133,6 +139,10 @@ find . -name "*.cpp" -exec chmod 644 {} \;
 find . -name "*.h" -exec chmod 644 {} \;
 
 %build
+%if 0%{?rhel} == 7
+. /opt/rh/devtoolset-8/enable
+%endif
+
 # Get the actual components to be built with the official build command:
 # bash -x ./bootStrap.bash \
 #     --with-core \

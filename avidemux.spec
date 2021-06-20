@@ -8,7 +8,7 @@
 
 Name:           avidemux
 Version:        2.7.8
-Release:        1%{?dist}
+Release:        2%{?dist}
 Epoch:          1
 Summary:        Free video editor designed for simple cutting, filtering and encoding tasks
 License:        GPLv2
@@ -341,6 +341,9 @@ appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/%{org}.ap
 %{_libdir}/libADM_render6_cli.so
 
 %changelog
+* Sun Jun 20 2021 Simone Caronni <negativo17@gmail.com> - 1:2.7.8-2
+- Rebuild for updated depdendencies.
+
 * Tue Apr 20 2021 Simone Caronni <negativo17@gmail.com> - 1:2.7.8-1
 - Update to 2.7.8.
 - Trim changelog.

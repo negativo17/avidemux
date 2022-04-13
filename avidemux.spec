@@ -7,8 +7,8 @@
 %global org org.avidemux.Avidemux
 
 Name:           avidemux
-Version:        2.7.8
-Release:        4%{?dist}
+Version:        2.8.0
+Release:        1%{?dist}
 Epoch:          1
 Summary:        Free video editor designed for simple cutting, filtering and encoding tasks
 License:        GPLv2
@@ -69,7 +69,7 @@ BuildRequires:  libvpx1.7-devel
 %endif
 
 %if 0%{?rhel} == 7
-BuildRequires:  devtoolset-8-gcc-c++
+BuildRequires:  devtoolset-9-gcc-c++
 %else
 BuildRequires:  gcc-c++
 %endif
@@ -82,7 +82,7 @@ projects, job queue and powerful scripting capabilities.
 
 %package libs
 Summary:    Base libraries for Avidemux
-Provides:   bundled(ffmpeg) = 4.2.3
+Provides:   bundled(ffmpeg) = 4.4.1
 
 %description libs
 Avidemux is a free video editor designed for simple cutting, filtering and
@@ -140,7 +140,7 @@ find . -name "*.h" -exec chmod 644 {} \;
 
 %build
 %if 0%{?rhel} == 7
-. /opt/rh/devtoolset-8/enable
+. /opt/rh/devtoolset-9/enable
 %endif
 
 # Get the actual components to be built with the official build command:
@@ -242,11 +242,11 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/%{org}.desktop
 appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/%{org}.appdata.xml
 %endif
 
+%if 0%{?rhel} == 7
+
 %ldconfig_scriptlets libs
 
 %ldconfig_scriptlets cli
-
-%if 0%{?rhel} == 7
 
 %post gui
 %{?ldconfig}
@@ -341,6 +341,9 @@ appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/%{org}.ap
 %{_libdir}/libADM_render6_cli.so
 
 %changelog
+* Wed Apr 13 2022 Simone Caronni <negativo17@gmail.com> - 1:2.8.0-1
+- Update to 2.8.0.
+
 * Mon Jul 26 2021 Simone Caronni <negativo17@gmail.com> - 1:2.7.8-4
 - Rebuild for updated dependencies.
 

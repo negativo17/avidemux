@@ -8,7 +8,7 @@
 
 Name:           avidemux
 Version:        2.8.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Epoch:          1
 Summary:        Free video editor designed for simple cutting, filtering and encoding tasks
 License:        GPLv2
@@ -18,7 +18,9 @@ Source0:        http://downloads.sourceforge.net/%{name}/%{name}_%{version}.tar.
 
 BuildRequires:  a52dec-devel
 BuildRequires:  alsa-lib-devel
+BuildRequires:  cmake3
 BuildRequires:  desktop-file-utils
+BuildRequires:  devtoolset-9-gcc-c++
 BuildRequires:  fontconfig-devel
 BuildRequires:  freetype-devel
 BuildRequires:  gettext
@@ -35,6 +37,7 @@ BuildRequires:  libsamplerate-devel
 BuildRequires:  libva-devel
 BuildRequires:  libvdpau-devel
 BuildRequires:  libvorbis-devel
+BuildRequires:  libvpx1.7-devel
 BuildRequires:  libxml2-devel
 BuildRequires:  libXmu-devel
 BuildRequires:  libxslt
@@ -43,7 +46,6 @@ BuildRequires:  libXv-devel
 BuildRequires:  mesa-libGL-devel
 BuildRequires:  mesa-libGLU-devel
 BuildRequires:  nv-codec-headers
-BuildRequires:  nvidia-sdk-video-codec
 BuildRequires:  opencore-amr-devel
 BuildRequires:  opus-devel
 BuildRequires:  pkgconfig
@@ -56,22 +58,9 @@ BuildRequires:  twolame-devel
 BuildRequires:  x264-devel
 BuildRequires:  x265-devel
 BuildRequires:  xvidcore-devel
+
+%ifarch x86_64
 BuildRequires:  yasm
-
-%if 0%{?fedora} || 0%{?rhel} >= 8
-BuildRequires:  cmake
-BuildRequires:  libappstream-glib
-BuildRequires:  libvpx-devel >= 1.7.0
-BuildRequires:  vapoursynth-devel
-%else
-BuildRequires:  cmake3
-BuildRequires:  libvpx1.7-devel
-%endif
-
-%if 0%{?rhel} == 7
-BuildRequires:  devtoolset-9-gcc-c++
-%else
-BuildRequires:  gcc-c++
 %endif
 
 %description
@@ -139,9 +128,7 @@ find . -name "*.cpp" -exec chmod 644 {} \;
 find . -name "*.h" -exec chmod 644 {} \;
 
 %build
-%if 0%{?rhel} == 7
 . /opt/rh/devtoolset-9/enable
-%endif
 
 # Get the actual components to be built with the official build command:
 # bash -x ./bootStrap.bash \
@@ -155,11 +142,7 @@ find . -name "*.h" -exec chmod 644 {} \;
 #     --with-system-libmp4v2
 
 prep() {
-%if 0%{?fedora}
-%cmake \
-%else
 %cmake3 \
-%endif
     -DAVIDEMUX_SOURCE_DIR=%{_builddir}/%{name}_%{version} \
     -DCMAKE_BUILD_TYPE=RelWithDebInfo \
     -DCMAKE_EDIT_COMMAND=vim \
@@ -236,13 +219,11 @@ cp -pav install/* %{buildroot}/
 # Generic man page
 install -p -Dm 644 man/%{name}.1 %{buildroot}%{_mandir}/man1/%{name}.1
 
+# No Appdata on CentOS/RHEL 7
+rm -fr %{buildroot}%{_datadir}/metainfo
+
 %check
 desktop-file-validate %{buildroot}%{_datadir}/applications/%{org}.desktop
-%if 0%{?fedora} || 0%{?rhel} >= 8
-appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/%{org}.appdata.xml
-%endif
-
-%if 0%{?rhel} == 7
 
 %ldconfig_scriptlets libs
 
@@ -258,14 +239,9 @@ appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/%{org}.ap
 %{_bindir}/update-mime-database %{_datadir}/mime &> /dev/null || :
 %{_bindir}/update-desktop-database &> /dev/null || :
 
-%endif
-
 %files libs
 %license COPYING 
 %doc README AUTHORS
-%if 0%{?fedora} || 0%{?rhel} >= 8
-%{_bindir}/vsProxy
-%endif
 %dir %{_datadir}/%{name}6
 %dir %{_libdir}/ADM_plugins6
 %{_libdir}/ADM_plugins6/audioDecoder
@@ -315,17 +291,9 @@ appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/%{org}.ap
 %files gui
 %{_bindir}/avidemux3_jobs_qt5
 %{_bindir}/avidemux3_qt5
-%if 0%{?fedora} || 0%{?rhel} >= 8
-%{_bindir}/vsProxy_gui_qt5
-%endif
 %{_datadir}/applications/%{org}.desktop
 %{_datadir}/icons/hicolor/*/apps/%{org}.png
 %{_datadir}/%{name}6/qt5
-%if 0%{?fedora} || 0%{?rhel} >= 8
-%{_datadir}/metainfo/%{org}.appdata.xml
-%else
-%exclude %{_datadir}/metainfo
-%endif
 %{_libdir}/ADM_plugins6/shaderDemo
 %{_libdir}/ADM_plugins6/videoEncoders/qt5
 %{_libdir}/ADM_plugins6/videoFilters/qt5
@@ -341,6 +309,9 @@ appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/%{org}.ap
 %{_libdir}/libADM_render6_cli.so
 
 %changelog
+* Fri Apr 22 2022 Simone Caronni <negativo17@gmail.com> - 1:2.8.0-2
+- Clean up SPEC file, split for the different branches.
+
 * Wed Apr 13 2022 Simone Caronni <negativo17@gmail.com> - 1:2.8.0-1
 - Update to 2.8.0.
 

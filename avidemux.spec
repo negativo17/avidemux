@@ -7,8 +7,8 @@
 %global org org.avidemux.Avidemux
 
 Name:           avidemux
-Version:        2.8.0
-Release:        2%{?dist}
+Version:        2.8.1
+Release:        1%{?dist}
 Epoch:          1
 Summary:        Free video editor designed for simple cutting, filtering and encoding tasks
 License:        GPLv2
@@ -309,6 +309,9 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/%{org}.desktop
 %{_libdir}/libADM_render6_cli.so
 
 %changelog
+* Thu Sep 22 2022 Simone Caronni <negativo17@gmail.com> - 1:2.8.1-1
+- Update to 2.8.1.
+
 * Fri Apr 22 2022 Simone Caronni <negativo17@gmail.com> - 1:2.8.0-2
 - Clean up SPEC file, split for the different branches.
 

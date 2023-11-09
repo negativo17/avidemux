@@ -15,6 +15,7 @@ License:        GPLv2
 URL:            http://fixounet.free.fr/%{name}/
 
 Source0:        http://downloads.sourceforge.net/%{name}/%{name}_%{version}.tar.gz
+Patch0:         %{name}-system-ffmpeg.patch
 
 BuildRequires:  a52dec-devel
 BuildRequires:  alsa-lib-devel
@@ -60,6 +61,12 @@ BuildRequires:  vapoursynth-devel
 BuildRequires:  x264-devel
 BuildRequires:  x265-devel
 BuildRequires:  xvidcore-devel
+
+BuildRequires:  libavcodec58-devel
+BuildRequires:  libavformat58-devel
+BuildRequires:  libavutil56-devel
+BuildRequires:  libpostproc55-devel
+BuildRequires:  libswscale5-devel
 
 %ifarch x86_64
 BuildRequires:  yasm
@@ -122,7 +129,11 @@ rm -fr \
     avidemux_plugins/ADM_audioDecoders/ADM_ad_mad/ADM_libMad \
     avidemux_plugins/ADM_audioEncoders/twolame/ADM_libtwolame \
     avidemux_plugins/ADM_muxers/muxerMp4v2/libmp4v2 \
-    avidemux_plugins/ADM_videoFilters6/ass/ADM_libass
+    avidemux_plugins/ADM_videoFilters6/ass/ADM_libass \
+    cmake/admFFmpeg* cmake/ffmpeg* avidemux_core/ffmpeg_package buildCore/ffmpeg
+
+sed -e 's/include(admFFmpegUtil)//g' -e '/registerFFmpeg/d' -i cmake/commonCmakeApplication.cmake
+sed -e 's/include(admFFmpegBuild)//g' -i avidemux_core/CMakeLists.txt
 
 # rpmlint fixes
 find . -name "*.swp" -delete

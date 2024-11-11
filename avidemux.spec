@@ -1,3 +1,13 @@
+#global tag %{version}
+
+%global commit0 7baa0b8ab6b8d4dce316830832fc9d59bfa01a09
+%global date 20241101
+%global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
+
+%global commit1 b91c7f7c26577e5be005b094604f813058c31682
+%global date 20240815
+%global shortcommit1 %(c=%{commit1}; echo ${c:0:7})
+
 %global __cmake_in_source_build 1
 %global _lto_cflags %{nil}
 
@@ -7,14 +17,20 @@
 %global org org.avidemux.Avidemux
 
 Name:           avidemux
-Version:        2.8.1
-Release:        4%{?dist}
+Version:        2.8.2%{!?tag:^%{date}git%{shortcommit0}}
+Release:        1%{?dist}
 Epoch:          1
 Summary:        Free video editor designed for simple cutting, filtering and encoding tasks
 License:        GPLv2
 URL:            http://fixounet.free.fr/%{name}/
 
-Source0:        http://downloads.sourceforge.net/%{name}/%{name}_%{version}.tar.gz
+%if 0%{?tag:1}
+Source0:        https://github.com/mean00/avidemux2/archive/%{version}/%{name}-%{version}.tar.gz
+Source1:        https://github.com/mean00/avidemux2_i18n/archive/%{version}/%{name}_i18n-%{version}.tar.gz
+%else
+Source0:        https://github.com/mean00/avidemux2/archive/%{commit0}.tar.gz#/%{name}-%{shortcommit0}.tar.gz
+Source1:        https://github.com/mean00/avidemux2_i18n/archive/%{commit1}.tar.gz#/%{name}_i18n-%{shortcommit1}.tar.gz
+%endif
 
 BuildRequires:  a52dec-devel
 BuildRequires:  alsa-lib-devel
@@ -42,7 +58,6 @@ BuildRequires:  libvpx-devel >= 1.7.0
 BuildRequires:  libxml2-devel
 BuildRequires:  libXmu-devel
 BuildRequires:  libxslt
-BuildRequires:  libxslt
 BuildRequires:  libXv-devel
 BuildRequires:  mesa-libGL-devel
 BuildRequires:  mesa-libGLU-devel
@@ -51,8 +66,8 @@ BuildRequires:  opencore-amr-devel
 BuildRequires:  opus-devel
 BuildRequires:  pkgconfig
 BuildRequires:  pulseaudio-libs-devel
-BuildRequires:  qt5-qtbase-devel
-BuildRequires:  qt5-qttools-devel
+BuildRequires:  qt6-qtbase-devel
+BuildRequires:  qt6-linguist
 BuildRequires:  SDL2-devel
 BuildRequires:  sqlite-devel
 BuildRequires:  twolame-devel
@@ -114,7 +129,9 @@ projects, job queue and powerful scripting capabilities.
 This package contains the graphical interface.
 
 %prep
-%autosetup -p1 -n %{name}_%{version}
+%setup -q -T -c -n %{name}-%{version}
+tar --strip 1 -xzf %{SOURCE0}
+tar --strip 1 -C avidemux/qt4/i18n -xzf %{SOURCE1}
 
 # Remove bundled libraries
 rm -fr \
@@ -144,11 +161,11 @@ find . -name "*.h" -exec chmod 644 {} \;
 
 prep() {
 %cmake \
-    -DAVIDEMUX_SOURCE_DIR=%{_builddir}/%{name}_%{version} \
+    -DAVIDEMUX_SOURCE_DIR=%{_builddir}/%{name}-%{version} \
     -DCMAKE_BUILD_TYPE=RelWithDebInfo \
     -DCMAKE_EDIT_COMMAND=vim \
-    -DENABLE_QT5=True \
-    -DFAKEROOT=%{_builddir}/%{name}_%{version}/install \
+    -DENABLE_QT6=True \
+    -DFAKEROOT=%{_builddir}/%{name}-%{version}/install \
     -DNVENC_INCLUDE_DIR=%{_includedir}/nvenc \
     -DOpenGL_GL_PREFERENCE=GLVND \
     -DUSE_EXTERNAL_LIBASS=true \
@@ -163,7 +180,7 @@ build() {
 # are not generated properly with other targets
 %make_build \
     INSTALL="install -p" \
-    DESTDIR=%{_builddir}/%{name}_%{version}/install \
+    DESTDIR=%{_builddir}/%{name}-%{version}/install \
     install \
     $*
 }
@@ -243,11 +260,11 @@ appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/%{org}.ap
 %{_libdir}/ADM_plugins6/videoEncoders/*.so
 %dir %{_libdir}/ADM_plugins6/videoFilters
 %{_libdir}/ADM_plugins6/videoFilters/*.so
-%{_libdir}/libADM6avcodec.so.58
-%{_libdir}/libADM6avformat.so.58
-%{_libdir}/libADM6avutil.so.56
-%{_libdir}/libADM6postproc.so.55
-%{_libdir}/libADM6swscale.so.5
+%{_libdir}/libADM6avcodec.so.61
+%{_libdir}/libADM6avformat.so.61
+%{_libdir}/libADM6avutil.so.59
+%{_libdir}/libADM6postproc.so.58
+%{_libdir}/libADM6swscale.so.8
 %{_libdir}/libADM_audioParser6.so
 %{_libdir}/libADM_core6.so
 %{_libdir}/libADM_coreAudio6.so
@@ -275,19 +292,19 @@ appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/%{org}.ap
 %{_mandir}/man1/%{name}.1*
 
 %files gui
-%{_bindir}/avidemux3_jobs_qt5
-%{_bindir}/avidemux3_qt5
-%{_bindir}/vsProxy_gui_qt5
+%{_bindir}/avidemux3_jobs_qt6
+%{_bindir}/avidemux3_qt6
+%{_bindir}/vsProxy_gui_qt6
 %{_datadir}/applications/%{org}.desktop
 %{_datadir}/icons/hicolor/*/apps/%{org}.png
-%{_datadir}/%{name}6/qt5
+%{_datadir}/%{name}6/qt6
 %{_datadir}/metainfo/%{org}.appdata.xml
 %{_libdir}/ADM_plugins6/shaderDemo
-%{_libdir}/ADM_plugins6/videoEncoders/qt5
-%{_libdir}/ADM_plugins6/videoFilters/qt5
-%{_libdir}/libADM_UIQT56.so
-%{_libdir}/libADM_openGLQT56.so
-%{_libdir}/libADM_render6_QT5.so
+%{_libdir}/ADM_plugins6/videoEncoders/qt6
+%{_libdir}/ADM_plugins6/videoFilters/qt6
+%{_libdir}/libADM_UIQT66.so
+%{_libdir}/libADM_openGLQT66.so
+%{_libdir}/libADM_render6_QT6.so
 
 %files cli
 %{_bindir}/avidemux3_cli
@@ -297,6 +314,11 @@ appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/%{org}.ap
 %{_libdir}/libADM_render6_cli.so
 
 %changelog
+* Mon Nov 11 2024 Simone Caronni <negativo17@gmail.com> - 1:2.8.2^20240815git7baa0b8-1
+- Update to 2.8.2 snapshot.
+- Trim changelog.
+- Switch to QT 6.
+
 * Wed Jun 07 2023 Simone Caronni <negativo17@gmail.com> - 1:2.8.1-4
 - Rebuild for updated dependencies.
 
@@ -314,45 +336,3 @@ appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/%{org}.ap
 
 * Wed Apr 13 2022 Simone Caronni <negativo17@gmail.com> - 1:2.8.0-1
 - Update to 2.8.0.
-
-* Mon Jul 26 2021 Simone Caronni <negativo17@gmail.com> - 1:2.7.8-4
-- Rebuild for updated dependencies.
-
-* Tue Jul 20 2021 Simone Caronni <negativo17@gmail.com> - 1:2.7.8-3
-- Rebuild for updated dependencies.
-
-* Sun Jun 20 2021 Simone Caronni <negativo17@gmail.com> - 1:2.7.8-2
-- Rebuild for updated depdendencies.
-
-* Tue Apr 20 2021 Simone Caronni <negativo17@gmail.com> - 1:2.7.8-1
-- Update to 2.7.8.
-- Trim changelog.
-
-* Sun Dec 06 2020 Simone Caronni <negativo17@gmail.com> - 1:2.7.6-4
-- Rebuild for updated dependencies.
-- Fix build requirements.
-
-* Sat Sep 05 2020 Simone Caronni <negativo17@gmail.com> - 1:2.7.6-3
-- Update build requirements.
-
-* Thu Aug 20 2020 Simone Caronni <negativo17@gmail.com> - 1:2.7.6-2
-- Fix build on RHEL/CentOS 7.
-
-* Tue Aug 18 2020 Simone Caronni <negativo17@gmail.com> - 1:2.7.6-1
-- Update to 2.7.6.
-- Clean up SPEC file.
-
-* Mon Oct 21 2019 Simone Caronni <negativo17@gmail.com> - 1:2.7.3-4
-- Rebuild for updated dependencies.
-
-* Sun Jul 07 2019 Simone Caronni <negativo17@gmail.com> - 1:2.7.3-3
-- Rebuild for updated dependencies.
-
-* Mon May 27 2019 Simone Caronni <negativo17@gmail.com> - 1:2.7.3-2
-- Rebuild for updated dependencies.
-
-* Sun May 12 2019 Simone Caronni <negativo17@gmail.com> - 1:2.7.3-1
-- Update to 2.7.3.
-
-* Thu Feb 28 2019 Simone Caronni <negativo17@gmail.com> - 1:2.7.1-4
-- Rebuild for updated dependencies.

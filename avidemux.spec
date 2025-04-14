@@ -1,11 +1,11 @@
 #global tag %{version}
 
-%global commit0 7baa0b8ab6b8d4dce316830832fc9d59bfa01a09
-%global date 20241101
+%global commit0 8773f70bfd1c54075208d70164b81cad882baabc
+%global date 20250413
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 
-%global commit1 b91c7f7c26577e5be005b094604f813058c31682
-%global date 20240815
+%global commit1 4d2693414068eb60ed9eea5720d8fa916ac7ab1a
+%global date 20250118
 %global shortcommit1 %(c=%{commit1}; echo ${c:0:7})
 
 %global __cmake_in_source_build 1
@@ -18,7 +18,7 @@
 
 Name:           avidemux
 Version:        2.8.2%{!?tag:^%{date}git%{shortcommit0}}
-Release:        1%{?dist}
+Release:        2%{?dist}
 Epoch:          1
 Summary:        Free video editor designed for simple cutting, filtering and encoding tasks
 License:        GPLv2
@@ -314,6 +314,9 @@ appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/%{org}.ap
 %{_libdir}/libADM_render6_cli.so
 
 %changelog
+* Mon Apr 14 2025 Simone Caronni <negativo17@gmail.com> - 1:2.8.2^20250118git8773f70-2
+- Update to latest snapshot.
+
 * Mon Nov 11 2024 Simone Caronni <negativo17@gmail.com> - 1:2.8.2^20240815git7baa0b8-1
 - Update to 2.8.2 snapshot.
 - Trim changelog.
